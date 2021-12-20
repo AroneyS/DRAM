@@ -21,6 +21,7 @@ HEATMAP_MODULES = ['M00001', 'M00004', 'M00008', 'M00009', 'M00012', 'M00165', '
 HEATMAP_CELL_HEIGHT = 10
 HEATMAP_CELL_WIDTH = 10
 KO_REGEX = r'^K\d\d\d\d\d$'
+EC_REGEX = r'^EC:\d+\.\d+\.\d+\.\d+$'
 ETC_COVERAGE_COLUMNS = ['module_id', 'module_name', 'complex', 'genome', 'path_length', 'path_length_coverage',
                         'percent_coverage', 'genes', 'missing_genes', 'complex_module_name']
 TAXONOMY_LEVELS = ['d', 'p', 'c', 'o', 'f', 'g', 's']
@@ -330,9 +331,10 @@ def split_into_steps(definition, split_char=' '):
         steps.append(step)
     return steps
 
-
 def is_ko(ko):
-    return re.match(KO_REGEX, ko) is not None
+    ko_match = re.match(KO_REGEX, ko) is not None
+    ec_match = re.match(EC_REGEX, ko) is not None
+    return ko_match | ec_match
 
 
 def make_module_network(definition, network: nx.DiGraph = None, parent_nodes=('start',)):
